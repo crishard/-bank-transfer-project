@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-
+import { internalError } from "./messages/messages";
 const app = express();
 
 app.use(express.json());
@@ -10,7 +10,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     }
     return res
         .status(500)
-        .json({ status: "erro", message: "Erro interno do Servidor" });
+        .json({ status: "erro", message: internalError });
 });
 
 
