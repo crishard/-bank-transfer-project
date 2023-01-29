@@ -28,5 +28,6 @@ Esta é a api de uma aplicação financeira, onde o usuário inicia com o valor 
         * Transações de *cash-out;*
         * Transações de *cash-in.*.
 
+## Diagrama Banco de Dados
 
-# In english
+<img src="./DiagramaBD.png"/>
