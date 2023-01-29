@@ -27,3 +27,6 @@ Esta é a api de uma aplicação financeira, onde o usuário inicia com o valor 
   * Data de realização da transação e/ou
         * Transações de *cash-out;*
         * Transações de *cash-in.*.
+
+
+# In english
