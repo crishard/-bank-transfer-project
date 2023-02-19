@@ -11,6 +11,15 @@ interface ICreateUser {
 export class CreateUser {
     async execute({ name, password }: ICreateUser) {
 
+        if (name.length < 3) {
+            return new Error(userShortName.message);
+        }
+
+        const checkUser = await prisma.users.findFirst({
+            where: {
+                username: name
+            }
+        })
        
     }
 }
