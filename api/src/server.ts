@@ -1,12 +1,14 @@
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { internalError } from "./messages/messages";
-import { routes } from "./routers";
+import  routes  from "./routers";
 
 
 const app = express();
-
-app.use(routes);
 app.use(express.json());
+
+app.use(cors());
+app.use(routes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof Error) {
