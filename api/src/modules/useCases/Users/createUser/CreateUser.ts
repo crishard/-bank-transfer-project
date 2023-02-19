@@ -21,5 +21,13 @@ export class CreateUser {
             }
         })
        
+        if (checkUser) {
+            return new Error(userExist.message)
+        } else {
+
+            const validadePassword = await passwordValid(password)
+
+            
+        }
     }
 }
