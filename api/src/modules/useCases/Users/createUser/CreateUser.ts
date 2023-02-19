@@ -20,7 +20,7 @@ export class CreateUser {
                 username: name
             }
         })
-       
+
         if (checkUser) {
             return new Error(userExist.message)
         } else {
@@ -33,7 +33,19 @@ export class CreateUser {
                 return new Error(invalidPassword.message)
             } else {
                 const hashPassword = await bcrypt.hash(password, 8);
-               
+                const createAccount = await prisma.accounts.create({
+                    data: {
+                        balance: 100
+                    }
+                });
+                const user = await prisma.users.create({
+                    data: {
+                        username: name,
+                        password: hashPassword,
+                        accountId: createAccount.id
+                    },
+                });
+                return user;
             }
         }
     }
