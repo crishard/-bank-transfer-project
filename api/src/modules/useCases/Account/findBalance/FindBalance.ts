@@ -1,9 +1,9 @@
 import { prisma } from "../../../../dataBase/prismaClient";
+import { permissionDenied } from "../../../../messages/messages";
 
 interface IFindBalance {
     userId: string;
 }
-
 
 export class FindBalance {
     async execute({ userId }: IFindBalance) {
@@ -16,7 +16,7 @@ export class FindBalance {
             }
         });
         if (!findUser) {
-            return new Error("Permissão negada!")
+            return new Error(permissionDenied.message)
         } else {
             const findBalance = await prisma.accounts.findMany({
                 where: {
