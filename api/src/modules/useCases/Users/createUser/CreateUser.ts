@@ -27,7 +27,14 @@ export class CreateUser {
 
             const validadePassword = await passwordValid(password)
 
-            
+            if (password.length < 8) {
+                return new Error(shortPassword.message);
+            } else if (validadePassword == false) {
+                return new Error(invalidPassword.message)
+            } else {
+                const hashPassword = await bcrypt.hash(password, 8);
+               
+            }
         }
     }
 }
