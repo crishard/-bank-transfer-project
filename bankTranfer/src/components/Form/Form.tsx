@@ -1,66 +1,65 @@
-export function Form() {
-    return (
-        <>
-            <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-                <div className="w-full max-w-md space-y-8">
-                    <div>
-                        <img
-                            className="mx-auto h-12 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                            alt="Your Company"
-                        />
-                        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                            Sign in to your account
-                        </h2>
-                        <p className="mt-2 text-center text-sm text-gray-600">
-                            Ou{' '}
-                            <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
-                               realize um cadastro!
-                            </a>
-                        </p>
-                    </div>
-                    <form className="mt-8 space-y-6" action="#" method="POST">
-                        <input type="hidden" name="remember" defaultValue="true" />
-                        <div className="-space-y-px rounded-md shadow-sm">
-                            <div>
-                                <label htmlFor="email-address" className="sr-only">
-                                    Username
-                                </label>
-                                <input
-                                    id="email-address"
-                                    name="name"
-                                    type="string"
-                                    autoComplete=""
-                                    required
-                                    className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="Email address"
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="sr-only">
-                                    Password
-                                </label>
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    required
-                                    className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="Password"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <button
-                                type="submit"
-                                className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                Sign in
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </>
-    )
+import { useForm } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { UserValidate } from "../../schema/userValidations";
+import "./Form.css"
+import { MessageError } from "./messageError/MessageError";
+import { InputForm } from "./inputForm/InputForm";
+import { HeaderForm } from "./herderForm/HeraderForm";
+import { ButtonForm } from "./buttonForm/ButtonForm";
+import { useState, useEffect } from "react";
+
+
+
+type FormData = yup.InferType<typeof UserValidate>;
+interface IFormProps {
+  register: boolean;
+  titleHeader: string;
+  optionHeader: string;
+}
+
+export function Form(props: IFormProps) {
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: yupResolver<any>(UserValidate)
+  });
+
+  const onSubmit = (data: FormData) => console.log(data);
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 3000);
+  }, []); 
+
+
+  return (
+    
+    <>
+    {isLoaded ? <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 main-form" >
+      <div className="px-8 py-8 container-form">
+        <HeaderForm title={props.titleHeader} option={props.optionHeader} hrefProp={props.register} />
+
+        <form className="w-full mt-8 form" onSubmit={handleSubmit(onSubmit)}>
+          <InputForm placeholder="Username" type="string" {...register("username")} />
+          <MessageError text={errors.username?.message} />
+
+          <InputForm placeholder="Password" type="password" {...register("password")} />
+          <MessageError text={errors.password?.message} />
+
+          {
+            props.register ? <ButtonForm text="Enviar" /> : <ButtonForm text="Entrar" />
+          }
+          
+
+        </form>
+      </div>
+    </div >:  <span className="loader"></span> }
+    </>
+
+    
+  );
 }
