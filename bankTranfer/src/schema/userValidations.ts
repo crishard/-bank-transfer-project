@@ -9,6 +9,6 @@ export const UserValidate = Yup.object().shape({
         .min(8, 'Precisa conter pelo menos 8 caracteres.')
         .matches(
             /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$/,
-            'Tente adicionar números e letras maiúsculas.'
+            'Tente adicionar números e maiúsculas.'
         ),
 });
