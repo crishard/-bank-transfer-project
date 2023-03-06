@@ -4,20 +4,16 @@ import { passwordValid } from "../../../helpers/validatePassword";
 import { userShortName, userExist, shortPassword, invalidPassword } from '../../../../messages/messages';
 
 interface ICreateUser {
-    name: string;
+    username: string;
     password: string;
 }
 
 export class CreateUser {
-    async execute({ name, password }: ICreateUser) {
-
-        if (name.length < 3) {
-            return new Error(userShortName.message);
-        }
+    async execute({ username, password }: ICreateUser) {
 
         const checkUser = await prisma.users.findFirst({
             where: {
-                username: name
+                username: username
             }
         })
 
@@ -40,7 +36,7 @@ export class CreateUser {
                 });
                 const user = await prisma.users.create({
                     data: {
-                        username: name,
+                        username: username,
                         password: hashPassword,
                         accountId: createAccount.id
                     },

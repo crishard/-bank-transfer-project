@@ -1,15 +1,19 @@
 import { prisma } from "../../../../dataBase/prismaClient";
 import { checkBalance } from "../../../helpers/checkBalance";
 import { updateBalance } from "../../../helpers/updateBalance";
+import { checkPassword } from "../../../helpers/verifyUser";
 
 interface ICreateTransaction {
     userCashIn: string;
     value: number;
     userId: string;
+    password: string;
 }
 
 export class CreateTransaction {
-    async execute({ userCashIn, value, userId }: ICreateTransaction) {
+    async execute({ password, userCashIn, value, userId }: ICreateTransaction) {
+
+        const verifyUser = await checkPassword(userId, password);
 
         //salvando data do creatAt sem considerar horário
         const creatAt = new Date().setHours(0, 0, 0, 0)
@@ -41,6 +45,10 @@ export class CreateTransaction {
             } else {
 
                 const checkBalanceEnough = await checkBalance(userId, value);
+
+                if (!verifyUser) {
+                    return new Error("Senha Inválida")
+                }
 
                 if (userId == userCashIn) {
                     return new Error("Você não pode realizar uma transação para sua própria conta!")
