@@ -31,6 +31,6 @@ export class LoginUser {
       expiresIn: "1d",
     });
 
-    return { token: token };
+    return token;
   }
 }
