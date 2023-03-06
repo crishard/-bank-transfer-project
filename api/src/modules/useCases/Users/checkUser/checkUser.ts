@@ -22,6 +22,6 @@ export async function checkUserAuthenticate(
     req.userId = sub;
     return next();
   } catch (err) {
-    return res.status(401).json({ message: "Token invalido" });
+    return res.status(401).json({ message: "Token invalido", token });
   }
 }
