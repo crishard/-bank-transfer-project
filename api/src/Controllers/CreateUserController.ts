@@ -3,10 +3,10 @@ import { CreateUser } from "../modules/useCases/Users/createUser/CreateUser";
 
 export class CreateUserController {
     async handle(req: Request, res: Response) {
-        const { name, password} = req.body;
+        const { username, password} = req.body;
         const createUser = new CreateUser();
         const resultado = await createUser.execute({
-            name,
+            username,
             password,
         });
         if (resultado instanceof Error) {

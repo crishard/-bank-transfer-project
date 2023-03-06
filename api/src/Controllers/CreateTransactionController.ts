@@ -3,11 +3,12 @@ import { CreateTransaction } from "../modules/useCases/Transactions/createTransa
 
 export class CreateTransactionController {
     async handle(req: Request, res: Response) {
-        const { userCashIn, value } = req.body;
+        const { userCashIn, value, password } = req.body;
         const {userId} = req;
         const createTransaction = new CreateTransaction();
         const resultado = await createTransaction.execute({
             userId,
+            password,
             userCashIn,
             value
         });
