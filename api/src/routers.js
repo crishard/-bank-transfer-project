@@ -1,0 +1,28 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+// imports
+const FindTransacionController_1 = require("./Controllers/FindTransacionController");
+const CreateUserController_1 = require("./Controllers/CreateUserController");
+const FindBalanceController_1 = require("./Controllers/FindBalanceController");
+const FilterTransactionsController_1 = require("./Controllers/FilterTransactionsController");
+const CreateTransactionController_1 = require("./Controllers/CreateTransactionController");
+const FindUserController_1 = require("./Controllers/FindUserController");
+const LoginController_1 = require("./Controllers/LoginController");
+const checkUser_1 = require("./modules/useCases/Users/checkUser/checkUser");
+const createUserController = new CreateUserController_1.CreateUserController();
+const findBalanceController = new FindBalanceController_1.FindBalanceController();
+const findTransactionsController = new FindTransacionController_1.FindTransactionsController();
+const loginUserController = new LoginController_1.LoginUserController();
+const findFilterTransactionsController = new FilterTransactionsController_1.FiltersTransactionsController();
+const findUserController = new FindUserController_1.FindUserController();
+const createTransactionController = new CreateTransactionController_1.CreateTransactionController();
+const routes = (0, express_1.Router)();
+routes.post("/create_user", createUserController.handle);
+routes.get("/balance", checkUser_1.checkUserAuthenticate, findBalanceController.handle);
+routes.post("/login", loginUserController.handle);
+routes.get("/transactions", checkUser_1.checkUserAuthenticate, findTransactionsController.handle);
+routes.get("/filters_transactions", checkUser_1.checkUserAuthenticate, findFilterTransactionsController.handle);
+routes.post("/create_transaction", checkUser_1.checkUserAuthenticate, createTransactionController.handle);
+routes.get("/user", checkUser_1.checkUserAuthenticate, findUserController.handle);
+exports.default = routes;
