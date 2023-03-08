@@ -19,5 +19,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         .json({ status: "erro", message: internalError });
 });
 
-
-app.listen(3000, () => console.log("Servidor rodando"));
+const port = process.env.PORT || 3000
+app.listen(port, () => console.log("Servidor rodando "));
