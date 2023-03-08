@@ -18,7 +18,7 @@ export class FindBalance {
         if (!findUser) {
             return new Error(permissionDenied.message)
         } else {
-            const findBalance = await prisma.accounts.findMany({
+            const findBalance = await prisma.accounts.findFirst({
                 where: {
                     id: {
                         equals: findUser.accountId
