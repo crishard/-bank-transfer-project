@@ -1,5 +1,4 @@
 // import { validateJWTToken } from "../../../../auth/AuthUser";
-import { ResultType } from "@remix-run/router/dist/utils";
 import { prisma } from "../../../../dataBase/prismaClient";
 
 import { permissionDenied } from "../../../../messages/messages"
