@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "Crislân",
   "scripts": {
-    "vercel-build": "npx prisma db push dev",
+    "vercel-build": "npx prisma migrate deploy",
     "dev": "ts-node-dev --exit-child --transpile-only --ignore-watch node_modules src/server.ts"
   },
   "keywords": [],
