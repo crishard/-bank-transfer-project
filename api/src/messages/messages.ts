@@ -41,3 +41,7 @@ export const emptyFilters = {
 export const transactionError = {
     message: "Erro de transação, por favor, informar corretamente os dados!"
 }
+
+export const passwordInvalidConfirm = {
+    message: "As senhas não batem"
+}
