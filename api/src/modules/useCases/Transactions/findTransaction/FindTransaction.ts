@@ -1,5 +1,5 @@
 import { prisma } from "../../../../dataBase/prismaClient";
-import { userNotExist, noMovement} from "../../../../messages/messages"
+import { userNotExist, noMovement } from "../../../../messages/messages"
 interface IFindTransaction {
     userId: string;
 }
@@ -28,14 +28,9 @@ export class FindTransactions {
                     ]
                 }
             })
-            if (findTransactions.length <= 0) {
-                return new Error(noMovement.message)
-            } else if(findTransactions.length > 0){
-                return findTransactions;
-            }
+            return findTransactions;
         } else {
             return new Error(userNotExist.message)
         }
-        
     }
 }
