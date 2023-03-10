@@ -29,9 +29,6 @@ export function HeaderForm(props: IHerderProps) {
         </a>: <a href={redirect} className="font-medium text-indigo-600 hover:text-indigo-500">
           realize {props.option}!
         </a>}
-        {/* <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
-          realize {props.option}!
-        </a> */}
       </p>
     </div>
   )
