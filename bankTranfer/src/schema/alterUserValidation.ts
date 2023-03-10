@@ -11,7 +11,7 @@ export const alterUSerValidation = Yup.object({
                   /^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{7,})\S$/,
                   'Tente adicionar números e letras maiúsculas.'
             ),
-      passwordConfirmation: Yup.string()
+      confirmPassword: Yup.string()
             .required('O campo "Senha" é obrigatório.')
             .min(8, 'Precisa conter pelo menos 8 caracteres.')
             .matches(

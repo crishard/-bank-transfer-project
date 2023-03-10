@@ -1,7 +1,6 @@
-
 import { api } from "../providers/api";
 
-export const createTransaction = async (value: number, userCashIn: string, password: string) => {
+export const alterUser = async (username: string, confirmPassword: string, password: string) => {
 
     const token = localStorage.getItem('token')?.replace(/^"(.+(?="$))"$/, '$1');
 
@@ -10,13 +9,12 @@ export const createTransaction = async (value: number, userCashIn: string, passw
     }
 
     const response = await api
-    .post("create_transaction", {
-        value,
+    .put("alter_user", {
+        username,
         password,
-        userCashIn,
+        confirmPassword,
     }, headerAutorization
     ).then(response => (response.data));
-
 
     return {response}
 };
