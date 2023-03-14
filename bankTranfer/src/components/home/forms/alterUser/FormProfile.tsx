@@ -4,6 +4,7 @@ import { alterUSerValidation } from "../../../../schema/alterUserValidation";
 import * as yup from "yup";
 import { ButtonForm } from "../../../Form/buttonForm/ButtonForm";
 import { MessageError } from "../../../Form/messageError/MessageError";
+import { alterUser } from "../../../../services/alterUser";
 
 
 type FormData = yup.InferType<typeof alterUSerValidation>;
@@ -13,7 +14,7 @@ export function FormProfile() {
         resolver: yupResolver<any>(alterUSerValidation)
     });
 
-    const onSubmit = (data: FormData) => console.log(data);
+    const onSubmit = (data: FormData) => alterUser(data.username, data.confirmPassword, data.password);
 
     return (
         <div>
@@ -27,8 +28,8 @@ export function FormProfile() {
                 </div>
 
                 <div>
-                    <input className="input-form " autoComplete="off" placeholder='Confirmar senha' type='password' {...register("passwordConfirmation")} />
-                    <MessageError text={errors.passwordConfirmation?.message} />
+                    <input className="input-form " autoComplete="off" placeholder='Confirmar senha' type='password' {...register("confirmPassword")} />
+                    <MessageError text={errors.confirmPassword?.message} />
 
                     <div className="mt-2.5">
 
