@@ -15,6 +15,7 @@ import { login } from "../../services/login";
 
 type FormData = yup.InferType<typeof UserValidate>;
 
+
 interface IFormProps {
   register: boolean;
   titleHeader: string;
@@ -31,40 +32,22 @@ export function Form(props: IFormProps) {
     resolver: yupResolver<any>(UserValidate)
   });
 
-  const onSubmit = (data: FormData) => {
-    if (props.register) {
-      userRegister(data.username, data.password).then(
-        (response) => {
-          alert("sucesso!");
-          navigate("/login")
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    } else if(!props.register){
-      login(data.username, data.password).then(
-        (response) => {
-          alert("sucesso!");
-          navigate("/")
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-            console.log(error.message)
-          }
-          );
+  const [error, setError] = useState("");
+
+  async function onSubmit(data: FormData) {
+    try {
+      if (props.register) {
+        await userRegister(data.username, data.password);
+        navigate("/login");
+      } else {
+        await login(data.username, data.password);
+        navigate("/");
+      }
+    } catch (error) {
+      setError("Ocorreu um erro. Tente novamente mais tarde.");
     }
   }
+  console.log(error)
 
   useEffect(() => {
     setTimeout(() => {
@@ -90,13 +73,9 @@ export function Form(props: IFormProps) {
             {
               props.register ? <ButtonForm text="Enviar" /> : <ButtonForm text="Entrar" />
             }
-
-
           </form>
         </div>
       </div > : <Loader />}
     </>
-
-
   );
 }
