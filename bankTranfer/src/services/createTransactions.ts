@@ -10,14 +10,13 @@ export const createTransaction = async (value: number, userCashIn: string, passw
     }
 
     const response = await api
-    .post("create_transaction", {
-        value,
-        password,
-        userCashIn,
-    }, headerAutorization
-    ).then(response => (response.data));
-
-
-    return {response}
+        .post("create_transaction", {
+            value,
+            password,
+            userCashIn,
+        }, headerAutorization
+        ).then(response => (response.data));
+        
+    return { response }
 };
 
