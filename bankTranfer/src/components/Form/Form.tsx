@@ -33,6 +33,7 @@ export function Form(props: IFormProps) {
   });
 
   const [error, setError] = useState("");
+  const [isLogged, setIsLogged] = useState(false)
 
   async function onSubmit(data: FormData) {
     try {
@@ -40,14 +41,18 @@ export function Form(props: IFormProps) {
         await userRegister(data.username, data.password);
         navigate("/login");
       } else {
-        await login(data.username, data.password);
-        navigate("/");
+        await login(data.username, data.password).catch((error) => {
+          if (error.response && error.response.status === 400 || 401) {
+            setError("Usuário ou senha inválido");
+          } else {
+            navigate("/");
+          }
+        });
       }
     } catch (error) {
       setError("Ocorreu um erro. Tente novamente mais tarde.");
     }
   }
-  console.log(error)
 
   useEffect(() => {
     setTimeout(() => {
@@ -69,6 +74,7 @@ export function Form(props: IFormProps) {
 
             <input className="input-form " autoComplete="off" placeholder='Password' type='password' {...register("password")} />
             <MessageError text={errors.password?.message} />
+            {error ? <MessageError text={error} /> : <></>}
 
             {
               props.register ? <ButtonForm text="Enviar" /> : <ButtonForm text="Entrar" />

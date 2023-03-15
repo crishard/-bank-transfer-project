@@ -7,7 +7,7 @@ interface IProps{
 
 export function MessageError(children: IProps){
     return(
-        <div className="message-error">
+        <div className="message-error text-center">
             <p>{children.text}</p>
         </div>
     )
