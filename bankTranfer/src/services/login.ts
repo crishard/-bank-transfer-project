@@ -5,6 +5,7 @@ export const login = async (username: string, password: string) => {
         .post("login", {
             username,
             password,
-        });
+        })
     localStorage.setItem("token", JSON.stringify(response.data));
+    return response
 };

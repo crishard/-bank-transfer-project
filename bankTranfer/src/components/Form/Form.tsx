@@ -6,7 +6,7 @@ import "./Form.css"
 import { MessageError } from "./messageError/MessageError";
 import { HeaderForm } from "./herderForm/HeraderForm";
 import { ButtonForm } from "./buttonForm/ButtonForm";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Loader } from "../loader/Loader";
 import { userRegister } from "../../services/register";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,11 @@ export function Form(props: IFormProps) {
   });
 
   const [error, setError] = useState("");
-  const [isLogged, setIsLogged] = useState(false)
+  interface ErrorResponse {
+    response?: {
+      status: number;
+    };
+  }
 
   async function onSubmit(data: FormData) {
     try {
@@ -41,13 +45,19 @@ export function Form(props: IFormProps) {
         await userRegister(data.username, data.password);
         navigate("/login");
       } else {
-        await login(data.username, data.password).catch((error) => {
-          if (error.response && error.response.status === 400 || 401) {
-            setError("Usuário ou senha inválido");
-          } else {
+        try {
+          const response = await login(data.username, data.password);
+          if (response.status === 200) {
             navigate("/");
           }
-        });
+        } catch (error: unknown) {
+          const err = error as ErrorResponse;
+          if (err.response?.status === 400) {
+            setError("Usuário ou senha inválido");
+          } else {
+            setError("Ocorreu um erro. Tente novamente mais tarde.");
+          }
+        }
       }
     } catch (error) {
       setError("Ocorreu um erro. Tente novamente mais tarde.");
@@ -69,12 +79,12 @@ export function Form(props: IFormProps) {
           <HeaderForm title={props.titleHeader} option={props.optionHeader} hrefProp={props.register} />
 
           <form className="w-full mt-8 form" onSubmit={handleSubmit(onSubmit)}>
-            <input className="input-form " autoComplete="off" placeholder='Username' type='string' {...register("username")} />
+            <input onFocus={() => setError("")}  className="input-form " autoComplete="off" placeholder='Username' type='string' {...register("username")} />
             <MessageError text={errors.username?.message} />
 
-            <input className="input-form " autoComplete="off" placeholder='Password' type='password' {...register("password")} />
+            <input onFocus={() => setError("")}  className="input-form " autoComplete="off" placeholder='Password' type='password' {...register("password")} />
             <MessageError text={errors.password?.message} />
-            {error ? <MessageError text={error} /> : <></>}
+            {error && <MessageError text={error} />}
 
             {
               props.register ? <ButtonForm text="Enviar" /> : <ButtonForm text="Entrar" />
