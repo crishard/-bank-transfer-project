@@ -1,0 +1,14 @@
+aside{
+    text-align: center;
+}
+.transacoes{
+    text-align: center;
+    border: 1px solid black;
+    display: flex;
+    gap: 5rem;
+    justify-content: center;
+    font-size: 16px;
+}
+.transacoes p{
+    width: 82px;
+}
