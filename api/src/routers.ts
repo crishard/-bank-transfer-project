@@ -9,7 +9,6 @@ import { CreateTransactionController } from "./Controllers/CreateTransactionCont
 import { FindUserController } from "./Controllers/FindUserController";
 import { LoginUserController } from "./Controllers/LoginController";
 import { checkUserAuthenticate } from "./modules/useCases/Users/checkUser/checkUser";
-import { AlterUserController } from "./Controllers/AlterUserController";
 
 
 const createUserController = new CreateUserController();
@@ -19,7 +18,6 @@ const loginUserController = new LoginUserController();
 const findFilterTransactionsController = new FiltersTransactionsController();
 const findUserController = new FindUserController();
 const createTransactionController = new CreateTransactionController();
-const alterUserController = new AlterUserController();
 
 const routes = Router();
 
@@ -27,9 +25,6 @@ const routes = Router();
 routes.post("/create_user", createUserController.handle);
 routes.post("/login", loginUserController.handle);
 routes.post("/create_transaction", checkUserAuthenticate, createTransactionController.handle);
-
-// update
-routes.put("/alter_user", checkUserAuthenticate, alterUserController.handle);
 
 //gets 
 routes.get("/balance", checkUserAuthenticate, findBalanceController.handle);
