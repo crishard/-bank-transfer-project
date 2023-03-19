@@ -4,13 +4,11 @@ import { userTokenIsInvalid, emptyFilters, noMovement } from "../../../../../mes
 interface IFiltersTransaction {
     userId: string;
     cashIn: boolean;
-    cashOut: boolean;
-    findDate: string;
+    findDate: Date;
 }
 
 export class FiltersTransactions {
-    async execute({ userId, cashIn, cashOut, findDate }: IFiltersTransaction) {
-
+    async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
 
         const findUserTransactions = await prisma.users.findFirst({
             where: {
@@ -20,56 +18,71 @@ export class FiltersTransactions {
             }
         });
 
+
+        if (cashIn) {
+            const findTransactionCredited = await prisma.transactions.findFirst({
+                where: {
+                    creditedAccountId: {
+                        equals: userId
+                    }
+                }
+            });
+            return findTransactionCredited
+        }
+
+
+        if (!cashIn) {
+            const findTransactionDebited = await prisma.transactions.findFirst({
+                where: {
+                    debitedAccountId: {
+                        equals: userId
+                    }
+                }
+            });
+            return findTransactionDebited
+        }
+
         if (findUserTransactions) {
-            if (cashIn) {
-                const findFilterTransactions = await prisma.transactions.findMany({
+            if (findDate) {
+                // const createFindDate = new Date(findDate);
+                const findTransactionsCreateAt = await prisma.transactions.findMany({
                     where: {
-                        creditedAccountId: {
-                            equals: findUserTransactions.accountId
+                        creatAt: {
+                            equals: findDate
                         }
                     }
                 });
 
-                return findFilterTransactions;
-            } else if (cashOut) {
-                const findFilterTransactions = await prisma.transactions.findMany({
+            } else if (findDate && cashIn) {
+                const findTransactionsCreateAtAndCredited = await prisma.transactions.findMany({
                     where: {
-                        debitedAccountId: {
-                            equals: findUserTransactions.accountId
-                        }
-                    }
-                })
-                return findFilterTransactions;
-            } else if (findDate) {
-
-                const dateCreateAt = await prisma.transactions.findFirst({
-                    where: {
-                        OR: [
+                        AND: [
                             {
-                                debitedAccountId: findUserTransactions.accountId
-                            },
-                            {
-                                creditedAccountId: findUserTransactions.accountId
+                                creatAt: {
+                                    equals: findDate
+                                },
+                                creditedAccountId: userId
                             }
                         ]
                     }
-                });
+                })
+                return findTransactionsCreateAtAndCredited;
 
-                const createFindDate = new Date(findDate);
-                if (!dateCreateAt) {
-                    return new Error(noMovement.message)
-                } else {
-                    const findTransactionsCreateAt = await prisma.transactions.findMany({
-                        where: {
-                            creatAt: {
-                                equals: createFindDate
+            }
+            else if (findDate && !cashIn) {
+                const findTransactionsCreateAtAndDebited = await prisma.transactions.findMany({
+                    where: {
+                        AND: [
+                            {
+                                creatAt: {
+                                    equals: findDate
+                                },
+                                creditedAccountId: userId
                             }
-                        }
-                    })
-                    return findTransactionsCreateAt;
-                }
-            } else {
-                return new Error(emptyFilters.message)
+                        ]
+                    }
+                })
+                return findTransactionsCreateAtAndDebited;
             }
         } else {
             return new Error(userTokenIsInvalid.message)

@@ -25,11 +25,11 @@ const routes = Router();
 routes.post("/create_user", createUserController.handle);
 routes.post("/login", loginUserController.handle);
 routes.post("/create_transaction", checkUserAuthenticate, createTransactionController.handle);
+routes.post("/filters_transactions", checkUserAuthenticate, findFilterTransactionsController.handle)
 
 //gets 
 routes.get("/balance", checkUserAuthenticate, findBalanceController.handle);
 routes.get("/transactions", checkUserAuthenticate, findTransactionsController.handle);
-routes.get("/filters_transactions", checkUserAuthenticate, findFilterTransactionsController.handle)
 routes.get("/user", checkUserAuthenticate, findUserController.handle);
 
 export default routes;
