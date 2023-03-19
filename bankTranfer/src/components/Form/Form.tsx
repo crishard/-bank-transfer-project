@@ -48,7 +48,7 @@ export function Form(props: IFormProps) {
         try {
           const response = await login(data.username, data.password);
           if (response.status === 200) {
-            navigate("/");
+            navigate("/home");
           }
         } catch (error: unknown) {
           const err = error as ErrorResponse;
@@ -78,7 +78,7 @@ export function Form(props: IFormProps) {
         <div className="px-8 py-8 container-form">
           <HeaderForm title={props.titleHeader} option={props.optionHeader} hrefProp={props.register} />
 
-          <form className="w-full mt-8 form" onSubmit={handleSubmit(onSubmit)}>
+          <form className="w-full mt-8 form text-center" onSubmit={handleSubmit(onSubmit)}>
             <input onFocus={() => setError("")}  className="input-form " autoComplete="off" placeholder='Username' type='string' {...register("username")} />
             <MessageError text={errors.username?.message} />
 
