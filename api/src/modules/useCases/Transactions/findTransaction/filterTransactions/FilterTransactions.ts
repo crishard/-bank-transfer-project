@@ -1,5 +1,5 @@
 import { prisma } from "../../../../../dataBase/prismaClient";
-import { userTokenIsInvalid, emptyFilters, noMovement } from "../../../../../messages/messages";
+import { userTokenIsInvalid } from "../../../../../messages/messages";
 
 interface IFiltersTransaction {
     userId: string;
@@ -18,32 +18,28 @@ export class FiltersTransactions {
             }
         });
 
-
-        if (cashIn) {
-            const findTransactionCredited = await prisma.transactions.findFirst({
-                where: {
-                    creditedAccountId: {
-                        equals: userId
-                    }
-                }
-            });
-            return findTransactionCredited
-        }
-
-
-        if (!cashIn) {
-            const findTransactionDebited = await prisma.transactions.findFirst({
-                where: {
-                    debitedAccountId: {
-                        equals: userId
-                    }
-                }
-            });
-            return findTransactionDebited
-        }
-
         if (findUserTransactions) {
-            if (findDate) {
+            if (cashIn) {
+                const findTransactionCredited = await prisma.transactions.findMany({
+                    where: {
+                        creditedAccountId: {
+                            equals: userId
+                        }
+                    }
+                });
+
+                return findTransactionCredited;
+
+            } else if (!cashIn) {
+                const findTransactionDebited = await prisma.transactions.findMany({
+                    where: {
+                        debitedAccountId: {
+                            equals: userId
+                        }
+                    }
+                });
+                return findTransactionDebited;
+            } else if (findDate) {
                 // const createFindDate = new Date(findDate);
                 const findTransactionsCreateAt = await prisma.transactions.findMany({
                     where: {
@@ -52,6 +48,7 @@ export class FiltersTransactions {
                         }
                     }
                 });
+                return findTransactionsCreateAt;
 
             } else if (findDate && cashIn) {
                 const findTransactionsCreateAtAndCredited = await prisma.transactions.findMany({
