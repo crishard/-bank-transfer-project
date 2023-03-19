@@ -15,7 +15,7 @@ export function ViewTransaction() {
     const { data } = getTransaction<Repositories[]>();
 
     return (
-        <section className="w-5/12 text-center">
+        <div className="w-5/12 text-center view-div px-2 rounded">
             <>
                 <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">Transações</h3>
                 <div className="transacoes">
@@ -26,9 +26,10 @@ export function ViewTransaction() {
                 <>
                     {data?.map((transaction) => {
                         const date = new Date(transaction.creatAt);
+                        const dataFormatada = date.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
                         return (
                             <div key={transaction.id} className="transacoes">
-                                <p>{date.getDate()} / {date.getMonth() + 1} / {date.getFullYear()}</p>
+                                <p className="tracking-wide">{dataFormatada}</p>
                                 <p>R$ {transaction.value}</p>
                             </div>
                         )
@@ -40,6 +41,6 @@ export function ViewTransaction() {
 
                 <p className="text-center">Sem mais para mostrar</p>
             </>
-        </section>
+        </div>
     )
 }

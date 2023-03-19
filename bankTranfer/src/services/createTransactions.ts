@@ -14,9 +14,8 @@ export const createTransaction = async (value: number, userCashIn: string, passw
             value,
             password,
             userCashIn,
-        }, headerAutorization
-        ).then(response => (response.data));
-        
-    return { response }
+        },
+            headerAutorization
+        );
 };
 
