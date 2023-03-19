@@ -1,11 +1,16 @@
-import { TransactionForm } from "../forms/transactions/TransactionForm";
+import { CreateTransactionForm } from "../forms/CreateTransactionForm";
+import { FindTransactionForm } from "../forms/FindTransactionForm";
 import { ViewTransaction } from "../viewTransactions/ViewTransaction";
 
 export function Transaction() {
     return (
-        <div className="flex gap-12 justify-evenly">
-            <ViewTransaction/>
-            <TransactionForm />
-        </div>
+        <main>
+            <div className="flex gap-16 justify-evenly mt-8 mb-12">
+                <ViewTransaction />
+                <FindTransactionForm />
+            </div>
+                
+            <CreateTransactionForm />
+        </main>
     )
 }
