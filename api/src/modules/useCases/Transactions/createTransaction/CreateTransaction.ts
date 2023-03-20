@@ -19,7 +19,7 @@ export class CreateTransaction {
         const creatAt = new Date().setHours(0, 0, 0, 0)
         const creatAtDateWithoutHours = new Date(creatAt);
 
-        const userCashInExist = await prisma.users.findUnique({
+        const userCashInExist = await prisma.users.findFirst({
             where: {
                 username: userCashIn
             }

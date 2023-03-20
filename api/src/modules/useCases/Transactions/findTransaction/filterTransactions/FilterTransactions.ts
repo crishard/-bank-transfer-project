@@ -23,8 +23,8 @@ export class FiltersTransactions {
                 const findTransactionCredited = await prisma.transactions.findMany({
                     where: {
                         creditedAccountId: {
-                            equals: userId
-                        }
+                            equals: findUserTransactions.accountId
+                        },
                     }
                 });
 
@@ -34,13 +34,12 @@ export class FiltersTransactions {
                 const findTransactionDebited = await prisma.transactions.findMany({
                     where: {
                         debitedAccountId: {
-                            equals: userId
+                            equals: findUserTransactions.accountId
                         }
                     }
                 });
                 return findTransactionDebited;
             } else if (findDate) {
-                // const createFindDate = new Date(findDate);
                 const findTransactionsCreateAt = await prisma.transactions.findMany({
                     where: {
                         creatAt: {
@@ -58,7 +57,7 @@ export class FiltersTransactions {
                                 creatAt: {
                                     equals: findDate
                                 },
-                                creditedAccountId: userId
+                                creditedAccountId: findUserTransactions.accountId
                             }
                         ]
                     }
@@ -74,7 +73,7 @@ export class FiltersTransactions {
                                 creatAt: {
                                     equals: findDate
                                 },
-                                creditedAccountId: userId
+                                creditedAccountId: findUserTransactions.accountId
                             }
                         ]
                     }
