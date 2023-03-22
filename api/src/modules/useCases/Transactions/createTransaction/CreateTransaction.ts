@@ -19,17 +19,15 @@ export class CreateTransaction {
         const creatAt = new Date().setHours(0, 0, 0, 0)
         const creatAtDateWithoutHours = new Date(creatAt);
 
-        const userCashInExist = await prisma.users.findFirst({
+        const userCashInExist = await prisma.users.findUnique({
             where: {
                 username: userCashIn
             }
         })
 
-        const findUserCashOut = await prisma.users.findFirst({
+        const findUserCashOut = await prisma.users.findUnique({
             where: {
-                id: {
-                    equals: userId
-                }
+                id:  userId
             }
         });
 
