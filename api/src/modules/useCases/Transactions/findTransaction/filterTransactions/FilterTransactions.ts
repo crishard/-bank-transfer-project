@@ -10,11 +10,9 @@ interface IFiltersTransaction {
 export class FiltersTransactions {
     async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
 
-        const findUserTransactions = await prisma.users.findFirst({
+        const findUserTransactions = await prisma.users.findUnique({
             where: {
-                id: {
-                    equals: userId
-                }
+                id: userId
             }
         });
 
