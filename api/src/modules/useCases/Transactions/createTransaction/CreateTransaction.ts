@@ -19,15 +19,19 @@ export class CreateTransaction {
         const creatAt = new Date().setHours(0, 0, 0, 0)
         const creatAtDateWithoutHours = new Date(creatAt);
 
-        const userCashInExist = await prisma.users.findUnique({
+        const userCashInExist = await prisma.users.findFirst({
             where: {
-                username: userCashIn
+                username: {
+                    equals: userCashIn
+                }
             }
         })
 
-        const findUserCashOut = await prisma.users.findUnique({
+        const findUserCashOut = await prisma.users.findFirst({
             where: {
-                id:  userId
+                id: {
+                    equals: userId
+                }
             }
         });
 
@@ -42,7 +46,7 @@ export class CreateTransaction {
                 return new Error("O usuário selecionado não existe")
             } else {
 
-                const checkBalanceEnough = await checkBalance(userId, value);
+                const checkBalanceEnough = await checkBalance(findUserCashOut.id, value);
 
                 if (!verifyUser) {
                     return new Error("Senha Inválida")
