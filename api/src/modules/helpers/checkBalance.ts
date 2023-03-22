@@ -7,18 +7,21 @@ export async function checkBalance(userId: string, value: number) {
             id: userId
         }
     });
+    if (findUser) {
 
-    const findAccount = await prisma.accounts.findUnique({
-        where: {
-            id: findUser?.accountId
-        }
-    });
+        const findAccount = await prisma.accounts.findUnique({
+            where: {
+                id: findUser?.accountId
+            }
+        });
 
-    if(findAccount){
-        if(findAccount.balance != null  && findAccount.balance < value){
-            return false
-        } else{
-            return true;
+        if (findAccount) {
+            if (findAccount.balance != null && findAccount.balance < value) {
+                return false
+            } else {
+                return true;
+            }
         }
     }
+
 }
