@@ -5,7 +5,7 @@ export const transactionValidate = Yup.object().shape({
     .required('O campo usuário é obrigatório!'),
     value: Yup.number()
         .min(1, 'O valor da transação tem que ser de pelo menos R$: 1.00')
-        .required('O campo "Valor" é obrigatório.'),
+        .required('O campo "Valor" é obrigatório.').typeError(""),
     password: Yup.string()
     .required('O campo "Senha" é obrigatório.')
     .min(8, 'Precisa conter pelo menos 8 caracteres.')

@@ -16,6 +16,7 @@ export async function getFilterTransaction<T = unknown>(userCashIn?: string, dat
             },
             headerAutorization
         );
+        return response
 
     } else if (userCashIn == "cashOut") {
 
@@ -26,6 +27,7 @@ export async function getFilterTransaction<T = unknown>(userCashIn?: string, dat
             },
             headerAutorization
         )
+        return response
 
     } else if (userCashIn == "") {
         const response = await api.post("filters_transactions",
@@ -34,6 +36,8 @@ export async function getFilterTransaction<T = unknown>(userCashIn?: string, dat
             },
             headerAutorization
         )
+        return response
     }
+
 };
 
