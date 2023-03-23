@@ -48,12 +48,13 @@ export class FiltersTransactions {
                 return findTransactionsCreateAt;
 
             } else if (findDate && cashIn) {
+                const dateFinDate = new Date(findDate)
                 const findTransactionsCreateAtAndCredited = await prisma.transactions.findMany({
                     where: {
                         AND: [
                             {
                                 creatAt: {
-                                    equals: findDate
+                                    equals: dateFinDate
                                 },
                                 creditedAccountId: findUserTransactions.accountId
                             }
