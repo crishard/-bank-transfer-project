@@ -53,9 +53,7 @@ export class FiltersTransactions {
                     where: {
                         AND: [
                             {
-                                creatAt: {
-                                    equals: findDate
-                                },
+                                creatAt: findDate,
                                 creditedAccountId: findUserTransactions.accountId
                             }
                         ]
