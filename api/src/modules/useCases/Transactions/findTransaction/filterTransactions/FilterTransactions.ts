@@ -62,7 +62,7 @@ export class FiltersTransactions {
                         ]
                     }
                 })
-                return findTransactionsCreateAtAndCredited;
+                return {findTransactionsCreateAtAndCredited, findDateDateWithoutHours};
 
             }
             else if (findDate && !cashIn) {
