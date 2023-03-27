@@ -8,7 +8,7 @@ interface IHerderProps {
 
 
 export function HeaderForm(props: IHerderProps) {
-  const [redirect, setRedirect] = useState('/register')
+  const [redirect, setRedirect] = useState('/')
 
   return (
     <div className="w-full max-w-md img-container">
