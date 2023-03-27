@@ -9,8 +9,8 @@ interface IFiltersTransaction {
 
 export class FiltersTransactions {
     async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
-        const dateFinDate = new Date(findDate).toLocaleString('pt-BR', { timeZone: 'UTC' });
-
+        const newFindDate = new Date(findDate.getFullYear(), findDate.getMonth(), findDate.getDay()).setHours(0, 0, 0, 0);
+        const findDateWithOutHours = new Date(newFindDate);
         const findUserTransactions = await prisma.users.findUnique({
             where: {
                 id: userId
@@ -49,13 +49,13 @@ export class FiltersTransactions {
                 return findTransactionsCreateAt;
 
             } else if (findDate && cashIn) {
-                
+
 
                 const findTransactionsCreateAtAndCredited = await prisma.transactions.findMany({
                     where: {
                         AND: [
                             {
-                                creatAt: dateFinDate,
+                                creatAt: findDateWithOutHours,
                                 creditedAccountId: findUserTransactions.accountId
                             }
                         ]
@@ -70,7 +70,7 @@ export class FiltersTransactions {
                         AND: [
                             {
                                 creatAt: {
-                                    equals: dateFinDate
+                                    equals: findDateWithOutHours
                                 },
                                 creditedAccountId: findUserTransactions.accountId
                             }
