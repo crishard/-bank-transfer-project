@@ -1,6 +1,7 @@
 import { prisma } from "../../../../../dataBase/prismaClient";
 import { userTokenIsInvalid } from "../../../../../messages/messages";
 
+
 interface IFiltersTransaction {
     userId: string;
     cashIn: boolean;
@@ -9,6 +10,7 @@ interface IFiltersTransaction {
 
 export class FiltersTransactions {
     async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
+        const normalizedFindDate = findDate.toISOString().slice(0, 10);
 
         const findUserTransactions = await prisma.users.findUnique({
             where: {
@@ -17,6 +19,10 @@ export class FiltersTransactions {
         });
 
         if (findUserTransactions) {
+
+            let dbTransactions;
+
+            // Somente CashIn 
             if (cashIn) {
                 const findTransactionCredited = await prisma.transactions.findMany({
                     where: {
@@ -28,6 +34,8 @@ export class FiltersTransactions {
 
                 return findTransactionCredited;
 
+
+                // somente CashOut
             } else if (!cashIn) {
                 const findTransactionDebited = await prisma.transactions.findMany({
                     where: {
@@ -37,43 +45,59 @@ export class FiltersTransactions {
                     }
                 });
                 return findTransactionDebited;
-            } else if (findDate) {
-                const findTransactionsCreateAt = await prisma.transactions.findMany({
-                    where: {
-                        creatAt: {
-                            equals: findDate
-                        }
-                    }
-                });
-                return findTransactionsCreateAt;
 
+
+                // somente Data
+            } else if (findDate) {
+
+                const dbTransactions = await prisma.transactions.findMany({
+                });
+
+                const filteredTransactions = dbTransactions.filter((transaction) => {
+                    const dbDate = new Date(transaction.creatAt);
+                    const normalizedDbDate = dbDate.toISOString().slice(0, 10);
+
+                    return normalizedDbDate === normalizedFindDate;
+                });
+
+                return filteredTransactions;
+
+
+
+                // Data e CashIn
             } else if (findDate && cashIn) {
                 const findTransactionsCreateAtAndCredited = await prisma.transactions.findMany({
                     where: {
-                        AND: [
-                            {
-                                creatAt: findDate,
-                                creditedAccountId: findUserTransactions.accountId
-                            }
-                        ]
+                        creditedAccountId: findUserTransactions.accountId
                     }
-                })
-                return findTransactionsCreateAtAndCredited;
+                });
+                const filteredTransactionsCreatAtAndCredited = findTransactionsCreateAtAndCredited.filter((transaction) => {
+                    const dbDate = new Date(transaction.creatAt);
+                    const normalizedDbDate = dbDate.toISOString().slice(0, 10);
+
+                    return normalizedDbDate === normalizedFindDate;
+                });
+
+                return filteredTransactionsCreatAtAndCredited;
+
             }
+
+            // Data e CashOut
             else if (findDate && !cashIn) {
                 const findTransactionsCreateAtAndDebited = await prisma.transactions.findMany({
                     where: {
-                        AND: [
-                            {
-                                creatAt: {
-                                    equals: findDate
-                                },
-                                creditedAccountId: findUserTransactions.accountId
-                            }
-                        ]
+                        creditedAccountId: findUserTransactions.accountId
                     }
                 })
-                return findTransactionsCreateAtAndDebited;
+                const filteredTransactionsCreatAtAndDebited = findTransactionsCreateAtAndDebited.filter((transaction) => {
+                    const dbDate = new Date(transaction.creatAt);
+                    const normalizedDbDate = dbDate.toISOString().slice(0, 10);
+
+                    return normalizedDbDate === normalizedFindDate;
+                });
+
+                return filteredTransactionsCreatAtAndDebited;
+
             }
         } else {
             return new Error(userTokenIsInvalid.message)
