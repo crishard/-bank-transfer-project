@@ -15,30 +15,28 @@ export function ViewTransaction() {
     const { data } = getTransaction<Repositories[]>();
 
     return (
-        <div className="w-5/12 text-center view-div px-2 rounded">
+        <div className="h-full w-5/12 text-center view-div px-2 rounded">
             <>
-                <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">Transações</h3>
-                <div className="transacoes">
-                    <p>Data</p>
-                    <p>Valor R$</p>
-                </div>
+                <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">Todas Transações</h3>
 
-                <>
+                <table className="transacoes w-full">
+                    <tr>
+                        <th>Data</th>
+                        <th>Valor</th>
+                    </tr>
                     {data?.map((transaction) => {
                         const date = new Date(transaction.creatAt);
-                        const dataFormatada = date.toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                        const dataFormatada = date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                         return (
-                            <div key={transaction.id} className="transacoes">
-                                <p className="tracking-wide">{dataFormatada}</p>
-                                <p>R$ {transaction.value}</p>
-                            </div>
+                            <>
+                                <tr key={transaction.id}>
+                                    <td className="tracking-wide">{dataFormatada}</td>
+                                    <td>R$ {transaction.value}</td>
+                                </tr>
+                            </>
                         )
                     })}
-
-
-                </>
-
-
+                </table>
                 <p className="text-center">Sem mais para mostrar</p>
             </>
         </div>
