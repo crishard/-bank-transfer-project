@@ -30,19 +30,16 @@ export function FindTransactionForm() {
 
     const { control, register, handleSubmit, formState: { errors } } = formMethods;
 
-
     const [error, setError] = useState("");
     const [filter, setFilter] = useState<Repositories[]>();
     const [isLoaded, setIsLoaded] = useState(true);
-
-
 
     async function onSubmit(data: FormData) {
         setIsLoaded(false)
         const response = await getFilterTransaction(data?.userCashIn, data?.date)
             .catch((err) => setError(err.response?.data))
             .then((response) => setFilter(response?.data));
-            setIsLoaded(true);
+        setIsLoaded(true);
     };
 
     return (
@@ -72,7 +69,7 @@ export function FindTransactionForm() {
                                         maxDate={addDays(new Date(), 0)}
                                         isClearable={true}
                                         locale="ptBR"
-                                        // dateFormat="dd mm aa"
+                                        dateFormat="yyyy/MM/dd"
                                         onChange={(date: Date) => onChange(date)} />
                                 )}
                             />
@@ -81,7 +78,6 @@ export function FindTransactionForm() {
                     </form>
                 </FormProvider>
             </div>
-
 
             {isLoaded ?
                 <>
@@ -93,31 +89,30 @@ export function FindTransactionForm() {
                                     <th>Data</th>
                                     <th>Valor</th>
                                 </tr>
-
                                 {
                                     filter.map((transaction) => {
                                         const date = new Date(transaction.creatAt);
                                         const dataFormatada = date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                                         return (
                                             <>
-                                            <tr key={transaction.id}>
-                                                <td className="tracking-wide">{dataFormatada}</td>
-                                                <td>R$ {transaction.value}</td>
-                                            </tr>
+                                                <tr key={transaction.id}>
+                                                    <td className="tracking-wide">{dataFormatada}</td>
+                                                    <td>R$ {transaction.value}</td>
+                                                </tr>
                                             </>
                                         )
                                     })
                                 }
                             </table>
                         </div>
-                    )
-                    }
+                    )}
 
                     {error && <MessageError text={error} />}
                 </>
-                : <div  className="flex mt-6 justify-center">
+                : <div className="flex mt-6 justify-center">
                     <div className="custom-loader"></div>
-                    </div>}
+                </div>
+            }
         </div>
     )
 }
