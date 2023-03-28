@@ -26,6 +26,7 @@ export function Form(props: IFormProps) {
 
 
   const [isLoaded, setIsLoaded] = useState(false);
+  const [reqLoaded, setReqLoaded] = useState(false);
   const navigate = useNavigate()
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
@@ -40,6 +41,7 @@ export function Form(props: IFormProps) {
   }
 
   async function onSubmit(data: FormData) {
+    setReqLoaded(true)
     try {
       if (props.register) {
         await userRegister(data.username, data.password);
@@ -62,6 +64,8 @@ export function Form(props: IFormProps) {
     } catch (error) {
       setError("Ocorreu um erro. Tente novamente mais tarde.");
     }
+
+    setReqLoaded(false);
   }
 
   useEffect(() => {
@@ -75,20 +79,24 @@ export function Form(props: IFormProps) {
 
     <>
       {isLoaded ? <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 main-form" >
+
+
+        {reqLoaded && <div className="absolute h-full w-full bg-[#efefef]"><Loader /></div>}
         <div className="px-8 py-8 container-form">
           <HeaderForm title={props.titleHeader} option={props.optionHeader} hrefProp={props.register} />
 
           <form className="w-full mt-8 form text-center" onSubmit={handleSubmit(onSubmit)}>
-            <input onFocus={() => setError("")}  className="input-form " autoComplete="off" placeholder='Username' type='string' {...register("username")} />
+            <input onFocus={() => setError("")} className="input-form " autoComplete="off" placeholder='Username' type='string' {...register("username")} />
             <MessageError text={errors.username?.message} />
 
-            <input onFocus={() => setError("")}  className="input-form " autoComplete="off" placeholder='Password' type='password' {...register("password")} />
+            <input onFocus={() => setError("")} className="input-form " autoComplete="off" placeholder='Password' type='password' {...register("password")} />
             <MessageError text={errors.password?.message} />
             {error && <MessageError text={error} />}
 
             {
               props.register ? <ButtonForm text="Enviar" /> : <ButtonForm text="Entrar" />
             }
+
           </form>
         </div>
       </div > : <Loader />}
