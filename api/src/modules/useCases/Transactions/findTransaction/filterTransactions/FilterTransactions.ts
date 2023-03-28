@@ -10,7 +10,7 @@ interface IFiltersTransaction {
 
 export class FiltersTransactions {
     async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
-        const normalizedFindDate = findDate.toISOString().slice(0, 10);
+        const normalizedFindDate = findDate?.toISOString().slice(0, 10);
 
         const findUserTransactions = await prisma.users.findUnique({
             where: {
@@ -19,8 +19,6 @@ export class FiltersTransactions {
         });
 
         if (findUserTransactions) {
-
-            let dbTransactions;
 
             // Somente CashIn 
             if (cashIn) {
