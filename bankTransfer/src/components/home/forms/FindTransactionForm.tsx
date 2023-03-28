@@ -80,6 +80,42 @@ export function FindTransactionForm() {
                 </FormProvider>
             </div>
 
+
+            {isLoaded ?
+                <>
+                    {filter && (
+                        <div className="mt-8 text-center">
+                            <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">Transações Filtradas</h3>
+                            <table className="transacoes w-full">
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                </tr>
+
+                                {
+                                    filter.map((transaction) => {
+                                        const date = new Date(transaction.creatAt);
+                                        const dataFormatada = date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+                                        return (
+                                            <>
+                                            <tr key={transaction.id}>
+                                                <td className="tracking-wide">{dataFormatada}</td>
+                                                <td>R$ {transaction.value}</td>
+                                            </tr>
+                                            </>
+                                        )
+                                    })
+                                }
+                            </table>
+                        </div>
+                    )
+                    }
+
+                    {error && <MessageError text={error} />}
+                </>
+                : <div  className="flex mt-6 justify-center">
+                    <div className="custom-loader"></div>
+                    </div>}
         </div>
     )
 }
