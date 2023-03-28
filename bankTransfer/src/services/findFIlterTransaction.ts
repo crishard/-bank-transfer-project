@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { api } from "../providers/api";
 
-export async function getFilterTransaction<T = unknown>(userCashIn?: string, date?: Date) {
+export async function getFilterTransaction<T = unknown>(userCashIn?: string, date?: Date | null) {
     const token = localStorage.getItem('token')?.replace(/^"(.+(?="$))"$/, '$1');
     const headerAutorization = {
         headers: { Authorization: `Bearer ${token}` }
