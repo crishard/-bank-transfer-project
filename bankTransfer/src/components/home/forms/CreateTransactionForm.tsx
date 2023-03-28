@@ -5,8 +5,8 @@ import { transactionValidate } from "../../../schema/transactionValidate";
 import { MessageError } from "../../Form/messageError/MessageError";
 import { ButtonForm } from "../../Form/buttonForm/ButtonForm";
 import { createTransaction } from "../../../services/createTransactions";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { PoPup } from "../../poPup/PoPup";
 
 type FormData = yup.InferType<typeof transactionValidate>;
 export function CreateTransactionForm() {
@@ -22,41 +22,73 @@ export function CreateTransactionForm() {
 
     const [error, setError] = useState("");
     const [message, setMessage] = useState("")
+    const [isLoaded, setIsLoaded] = useState(true);
 
     async function onSubmit(data: FormData) {
+        setIsLoaded(false)
         await createTransaction(data.value, data.userCashIn, data.password)
             .catch((err) => setError(err.response?.data))
-            .then(() => { setMessage("Sucesso") })
+            .then(() => { setMessage("Transação Realizada"); window.location.reload() })
+        setIsLoaded(true);
     };
+
+    useEffect(() => {
+        setTimeout(() => {
+            setMessage("");
+        }, 3000);
+    }, []);
 
     return (
         <section>
-            <div>
+            {isLoaded ? <>
 
-                <h2 className="tracking-wider font-bold text-lg text-center mb-3">Realizar uma nova Transação</h2>
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)} className='flex gap-6 items-center justify-center'>
-
-
+                {message && <PoPup text={message} />}
                 <div>
-                    <label htmlFor="userCredit">Nome do usuário a Receber</label>
-                    <input onFocus={() => setError("")} id="userCredit" className="input-form " autoComplete="off" placeholder='Usuário a Receber' type='string' {...register("userCashIn")} />
-                    <MessageError text={errors.userCashIn?.message} />
-
-                    <label htmlFor="valueTransfer">Valor da transferência</label>
-                    <input onFocus={() => setError("")} required id="valueTransfer" className="input-form " autoComplete="off" placeholder='Valor' type='number' {...register("value")} />
-                    <MessageError text={errors.value?.message} />
+                    <h2 className="tracking-wider font-bold text-lg text-center mb-3">Realizar uma nova Transação</h2>
                 </div>
-                <div>
-                    <label htmlFor="passwordTranfer">Digite sua senha para confirmar</label>
-                    <input onFocus={() => setError("")} id="passwordTranfer" className="input-form " autoComplete="off" placeholder='Confirm Password' type='password' {...register("password")} />
-                    <MessageError text={errors.password?.message} />
+                <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-2 gap-5'>
 
-                    <div className="mt-2.5">
-                        {error ? <MessageError text={error} /> : <p className="font-normal text-base text-rose-700">Verifique se as informações estão corretas</p>}<ButtonForm text="Transferir" />
+                    <div>
+                        <div className="py-4">
+
+                            <label htmlFor="userCredit">Nome do usuário a Receber</label>
+                            <input onFocus={() => setError("")} id="userCredit" className="input-form " autoComplete="off" placeholder='Usuário a Receber' type='string' {...register("userCashIn")} />
+                            <div className="absolute">
+
+                                <MessageError text={errors.userCashIn?.message} />
+                            </div>
+                        </div>
+                        <div className="py-4">
+
+                            <label htmlFor="valueTransfer">Valor da transferência</label>
+                            <input onFocus={() => setError("")} required id="valueTransfer" className="input-form " autoComplete="off" placeholder='Valor' type='number' {...register("value")} />
+                            <div className="absolute">
+
+                                <MessageError text={errors.value?.message} />
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-            </form>
+                    <div>
+                        <div className="py-4">
+                            <label htmlFor="passwordTranfer">Digite sua senha para confirmar</label>
+                            <input onFocus={() => setError("")} id="passwordTranfer" className="input-form " autoComplete="off" placeholder='Confirm Password' type='password' {...register("password")} />
+                            <div className="absolute">
+
+                                <MessageError text={errors.password?.message} />
+                            </div>
+                        </div>
+
+                        <div className="mt-2.5 py-4">
+                            {error ? <MessageError text={error} /> : <p className="font-normal text-base text-rose-700">Verifique ás informações</p>}
+                            <ButtonForm text="Transferir" />
+                        </div>
+                    </div>
+                </form></>
+                :
+                <div className="flex mt-6 justify-center">
+                    <div className="custom-loader"></div>
+                </div>}
         </section>
     )
 }
