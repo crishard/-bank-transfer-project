@@ -1,5 +1,4 @@
 import { getTransaction } from "../../../services/getTransaction";
-import { LineTransaction } from "./lineTransaction/LineTransaction";
 import "./ViewTransaction.css";
 
 type Repositories = {
@@ -17,7 +16,7 @@ export function ViewTransaction() {
     return (
         <div className="h-full w-5/12 text-center view-div px-2 rounded">
             <>
-                <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">Todas Transações</h3>
+                <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">Todas Movimentações</h3>
 
                 <table className="transacoes w-full">
                     <tr>
@@ -28,16 +27,15 @@ export function ViewTransaction() {
                         const date = new Date(transaction.creatAt);
                         const dataFormatada = date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
                         return (
-                            <>
-                                <tr key={transaction.id}>
-                                    <td className="tracking-wide">{dataFormatada}</td>
-                                    <td>R$ {transaction.value}</td>
-                                </tr>
-                            </>
+
+                            <tr key={transaction.id}>
+                                <td className="tracking-wide">{dataFormatada}</td>
+                                <td>R$ {transaction.value}</td>
+                            </tr>
                         )
                     })}
                 </table>
-                <p className="text-center">Sem mais para mostrar</p>
+                <p className="text-center text-[#ca1444]">Sem mais para mostrar</p>
             </>
         </div>
     )
