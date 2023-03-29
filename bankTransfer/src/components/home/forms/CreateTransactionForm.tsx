@@ -35,18 +35,19 @@ export function CreateTransactionForm() {
     useEffect(() => {
         setTimeout(() => {
             setMessage("");
-        }, 3000);
+        }, 5000);
     }, []);
 
+
     return (
-        <section>
+        <div className="create-transaction-div">
             {isLoaded ? <>
 
                 {message && <PoPup text={message} />}
                 <div>
                     <h2 className="tracking-wider font-bold text-lg text-center mb-3">Realizar uma nova Transação</h2>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)} className='grid grid-cols-2 gap-5'>
+                <form onSubmit={handleSubmit(onSubmit)} className='create-transaction-fom grid grid-cols-2 gap-5'>
 
                     <div>
                         <div className="py-4">
@@ -71,7 +72,7 @@ export function CreateTransactionForm() {
                     </div>
                     <div>
                         <div className="py-4">
-                            <label htmlFor="passwordTranfer">Digite sua senha para confirmar</label>
+                            <label htmlFor="passwordTranfer">Digite sua senha: </label>
                             <input onFocus={() => setError("")} id="passwordTranfer" className="input-form " autoComplete="off" placeholder='Confirm Password' type='password' {...register("password")} />
                             <div className="absolute">
 
@@ -89,6 +90,6 @@ export function CreateTransactionForm() {
                 <div className="flex mt-6 justify-center">
                     <div className="custom-loader"></div>
                 </div>}
-        </section>
+        </div>
     )
 }
