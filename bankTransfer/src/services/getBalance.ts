@@ -10,7 +10,7 @@ export function getBalance<T = unknown>() {
         api.get("balance", {
             headers: { Authorization: `Bearer ${token}` }
         }
-        ).then(response => setData(response.data));
+        ).then((response) => setData(response.data));
     }, []);
     return { data }
 };

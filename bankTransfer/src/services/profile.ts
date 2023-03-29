@@ -9,7 +9,7 @@ export function profileData<T = unknown>() {
         api.get("user", {
             headers: { Authorization: `Bearer ${token}` }
         }
-        ).then(response => setData(response.data));
+        ).then((response) => setData(response.data));
     }, []);
     return { data }
 };

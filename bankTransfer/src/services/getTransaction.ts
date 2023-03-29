@@ -9,7 +9,7 @@ export function getTransaction<T = unknown>() {
         api.get("transactions", {
             headers: { Authorization: `Bearer ${token}` }
         }
-        ).then(response => setData(response.data));
+        ).then((response) => setData(response.data));
     }, []);
     return { data }
 };
