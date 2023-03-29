@@ -20,7 +20,7 @@ export function Home() {
       {isLoaded ?
         <>
           <NavBar />
-          <main className="px-12">
+          <main>
             <Transaction />
           </main>
         </>
