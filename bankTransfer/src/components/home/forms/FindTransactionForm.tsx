@@ -43,12 +43,11 @@ export function FindTransactionForm() {
     };
 
     return (
-        <div className="text-center items-center">
+        <div className="find-transaction-div text-center items-center">
             <h2 className="tracking-wider font-bold text-lg text-center mb-3">Filtre sua busca: </h2>
             <div className="find-transaction">
-
                 <FormProvider {...formMethods}>
-                    <form onSubmit={handleSubmit(onSubmit)} className='flex gap-6'>
+                    <form onSubmit={handleSubmit(onSubmit)} className='find-transaction-fom flex gap-6'>
                         <select {...register("userCashIn")}>
                             <option key={"no"} value="">Selecione</option>
                             <option key={"CashIn"} value="cashOut">Realizadas</option>
@@ -69,7 +68,7 @@ export function FindTransactionForm() {
                                         maxDate={addDays(new Date(), 0)}
                                         isClearable={true}
                                         locale="ptBR"
-                                        dateFormat="yyyy/MM/dd"
+                                        dateFormat="dd/MM/yyyy"
                                         onChange={(date: Date) => onChange(date)} />
                                 )}
                             />
@@ -104,6 +103,7 @@ export function FindTransactionForm() {
                                     })
                                 }
                             </table>
+                            <p className="text-center text-[#ca1444]">Sem mais para mostrar</p>
                         </div>
                     )}
 

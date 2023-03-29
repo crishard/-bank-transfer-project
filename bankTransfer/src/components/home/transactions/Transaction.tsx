@@ -7,23 +7,22 @@ export function Transaction() {
 
     const [findTransaction, setFindTransaction] = useState(true);
     return (
-        <main>
-            <div className="flex gap-16 justify-evenly mt-8 mb-12">
+        <section>
+            <div className="transaction-operation flex gap-8 justify-evenly mt-8 mb-12">
                 <ViewTransaction />
 
-                <section className="w-5/12">
-
-                    <div className="text-end text-sm">
+                <div className="form-transaction-grid w-5/12 grid">
+                    <div className="button-option text-end text-sm">
                         {findTransaction ?
-                            <button className="w-32 font-medium rounded text-white bg-indigo-600 py-2.5 px-4 text-sm" onClick={() => setFindTransaction(false)}>Realize uma transferência</button>
+                            <button className="w-32 font-medium rounded text-white bg-indigo-600 py-2.5 px-4" onClick={() => setFindTransaction(false)}>Realize uma transferência</button>
                             :
-                            <button className="w-32 font-medium rounded text-white bg-indigo-600 py-2.5 px-4 text-sm" onClick={() => setFindTransaction(true)}>Filtrar Transferências</button>}
+                            <button className="w-32 font-medium rounded text-white bg-indigo-600 py-2.5 px-4" onClick={() => setFindTransaction(true)}>Filtrar Transferências</button>}
                     </div>
 
                     {findTransaction ? <FindTransactionForm /> : <CreateTransactionForm />}
-                </section>
+                </div>
 
             </div>
-        </main>
+        </section>
     )
 }
