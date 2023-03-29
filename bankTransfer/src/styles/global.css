@@ -32,3 +32,63 @@ body{
 .input-form ::placeholder{
     color: black;
 }
+
+@media (max-width: 1020px)
+{
+    main{
+        width: 100%;
+    }
+    .transaction-operation{
+        width: 80%;
+        display: block;
+        margin: 0 auto;
+    }
+    .form-transaction-grid, .view-div{
+        width: 100%;
+        padding: 10px 40px 10px 40px;
+    }
+}
+
+@media (max-width: 660px)
+{
+    .transaction-operation{
+        width: 100%;
+    }
+    .form-transaction-grid, .view-div{
+        width: 100%;
+        padding: 5px 15px 5px 15px;
+    }
+}
+
+@media (max-width: 490px)
+{
+    .form-transaction-grid{
+        display: block;
+    }
+    .button-option{
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .find-transaction-div .find-transaction .find-transaction-fom{
+        display: block;
+        width: 100%;
+        gap:2rem;
+    }
+    .find-transaction-fom select,  .find-transaction-fom div,  .find-transaction-fom button{
+        margin: 5px 0px 5px 0px;
+    }
+    .find-transaction-fom button{
+        width: 70%;
+        display: block;
+        margin: 0 auto;
+    }
+}
+
+
+@media (max-width: 460px)
+{
+    .create-transaction-div .create-transaction-fom{
+        display: block;
+        padding: 0px 20px 0px 20px;
+    }
+}
