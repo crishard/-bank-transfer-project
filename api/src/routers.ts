@@ -8,7 +8,7 @@ import { FiltersTransactionsController } from "./Controllers/FilterTransactionsC
 import { CreateTransactionController } from "./Controllers/CreateTransactionController";
 import { FindUserController } from "./Controllers/FindUserController";
 import { LoginUserController } from "./Controllers/LoginController";
-import { checkUserAuthenticate } from "./modules/useCases/Users/checkUser/checkUser";
+import { AuthMiddleware } from "./modules/useCases/Users/checkUser/AuthMiddleware";
 
 
 const createUserController = new CreateUserController();
@@ -24,12 +24,12 @@ const routes = Router();
 // posts
 routes.post("/create_user", createUserController.handle);
 routes.post("/login", loginUserController.handle);
-routes.post("/create_transaction", checkUserAuthenticate, createTransactionController.handle);
-routes.post("/filters_transactions", checkUserAuthenticate, findFilterTransactionsController.handle)
+routes.post("/create_transaction", AuthMiddleware.authenticate, createTransactionController.handle);
+routes.post("/filters_transactions", AuthMiddleware.authenticate, findFilterTransactionsController.handle)
 
 //gets 
-routes.get("/balance", checkUserAuthenticate, findBalanceController.handle);
-routes.get("/transactions", checkUserAuthenticate, findTransactionsController.handle);
-routes.get("/user", checkUserAuthenticate, findUserController.handle);
+routes.get("/balance", AuthMiddleware.authenticate, findBalanceController.handle);
+routes.get("/transactions", AuthMiddleware.authenticate, findTransactionsController.handle);
+routes.get("/user", AuthMiddleware.authenticate, findUserController.handle);
 
 export default routes;
