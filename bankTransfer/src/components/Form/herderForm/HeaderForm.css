@@ -1,0 +1,21 @@
+.img-container{
+    width: 100%;
+    max-width: 28rem;
+}
+
+.img-container img{
+    width: auto;
+    height: 100px;
+    margin: 0px auto;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 5px;
+}
+
+.img-container h2{
+
+}
+
+.img-container .link-header{
+    font-weight: 500;
+}
