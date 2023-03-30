@@ -1,36 +1,18 @@
-import { prisma } from "../../../../dataBase/prismaClient";
-import { userNotExist, noMovement } from "../../../../messages/messages"
-interface IFindTransaction {
+import { findUserById } from "../../../repositories/usersRepository";
+import { findTransactionsByAccountId } from "../../../repositories/transactionRepository";
+import { userNotExist } from "../../../../messages/messages";
+
+interface IFindTransactions {
     userId: string;
 }
+export async function findTransactions({ userId }: IFindTransactions) {
+    const user = await findUserById(userId);
 
-export class FindTransactions {
-    async execute({ userId }: IFindTransaction) {
-
-
-        const findUserTransactions = await prisma.users.findFirst({
-            where: {
-                id: {
-                    equals: userId
-                }
-            }
-        })
-        if (findUserTransactions) {
-            const findTransactions = await prisma.transactions.findMany({
-                where: {
-                    OR: [
-                        {
-                            debitedAccountId: findUserTransactions.accountId
-                        },
-                        {
-                            creditedAccountId: findUserTransactions.accountId
-                        }
-                    ]
-                }
-            })
-            return findTransactions;
-        } else {
-            return new Error(userNotExist.message)
-        }
+    if (!user) {
+        throw new Error(userNotExist.message);
     }
+
+    const transactions = await findTransactionsByAccountId(user.accountId);
+
+    return transactions;
 }
