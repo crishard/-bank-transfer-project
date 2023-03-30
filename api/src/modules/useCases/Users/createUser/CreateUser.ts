@@ -1,7 +1,10 @@
-import { prisma } from "../../../../dataBase/prismaClient";
-import * as bcrypt from "bcrypt";
-import { passwordValid } from "../../../helpers/validatePassword";
-import { userShortName, userExist, shortPassword, invalidPassword } from '../../../../messages/messages';
+import { passwordValid } from "../../../resquestAndValidate/password/validatePassword";
+import { invalidPassword } from "../../../../messages/messages";
+import { validateUsername } from "../../../resquestAndValidate/users/validateUsername"
+import { checkUserExist } from "../../../resquestAndValidate/users/findUserByUsername";
+import { hashPassword } from "../../../resquestAndValidate/password/hashPassword";
+import { createAccount } from "../../Account/createAccount/CreateAccount";
+import { User, createUser } from "../../../resquestAndValidate/users/createUser";
 
 interface ICreateUser {
     username: string;
@@ -10,39 +13,29 @@ interface ICreateUser {
 
 export class CreateUser {
     async execute({ username, password }: ICreateUser) {
+        try {
+            await validateUsername(username);
+            await checkUserExist(username);
 
-        const checkUser = await prisma.users.findFirst({
-            where: {
-                username: username
+            const isValidPassword = await passwordValid(password);
+            if (password.length < 8 || !isValidPassword) {
+                throw invalidPassword;
             }
-        })
 
-        if (checkUser) {
-            return new Error(userExist.message)
-        } else {
+            const hashedPassword = await hashPassword(password);
 
-            const validadePassword = await passwordValid(password)
+            const account = await createAccount();
 
-            if (password.length < 8) {
-                return new Error(shortPassword.message);
-            } else if (validadePassword == false) {
-                return new Error(invalidPassword.message)
-            } else {
-                const hashPassword = await bcrypt.hash(password, 8);
-                const createAccount = await prisma.accounts.create({
-                    data: {
-                        balance: 100
-                    }
-                });
-                const user = await prisma.users.create({
-                    data: {
-                        username: username,
-                        password: hashPassword,
-                        accountId: createAccount.id
-                    },
-                });
-                return user;
-            }
+            const user: User = {
+                username,
+                password: hashedPassword,
+                accountId: account.id,
+            };
+            const createdUser = await createUser(user);
+
+            return createdUser;
+        } catch (error) {
+            throw error;
         }
     }
 }
