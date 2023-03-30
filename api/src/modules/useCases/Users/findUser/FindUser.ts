@@ -1,32 +1,23 @@
-// import { validateJWTToken } from "../../../../auth/AuthUser";
 import { prisma } from "../../../../dataBase/prismaClient";
-
-import { permissionDenied } from "../../../../messages/messages"
+import { permissionDenied } from "../../../../messages/messages";
 
 interface IFindUser {
     userId: string;
 }
-
 export class FindUser {
     async execute({ userId }: IFindUser) {
-
-        const findUser = await prisma.users.findFirst({
-            where: {
-                id: {
-                    equals: userId
-                }
+        const user = await prisma.users.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                username: true
             }
-        })
+        });
 
-        if (!findUser) {
-            return new Error(permissionDenied.message)
-        } else {
-            const resultado = await prisma.users.findUnique({
-                where: {
-                    id: userId
-                }
-            })
-            return resultado;
+        if (!user) {
+            throw new Error(permissionDenied.message);
         }
+
+        return user;
     }
 }
