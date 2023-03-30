@@ -1,31 +1,30 @@
-import { prisma } from "../../../../dataBase/prismaClient";
-import { permissionDenied } from "../../../../messages/messages";
+import { PrismaClient } from '@prisma/client';
+import { permissionDenied } from '../../../../messages/messages';
+
+const prisma = new PrismaClient();
 
 interface IFindBalance {
-    userId: string;
+  userId: string;
 }
 
 export class FindBalance {
-    async execute({ userId }: IFindBalance) {
+  async execute({ userId }: IFindBalance) {
+    const findUser = await prisma.users.findFirst({
+      where: {
+        id: userId,
+      },
+    });
 
-        const findUser = await prisma.users.findFirst({
-            where: {
-                id: {
-                    equals: userId
-                }
-            }
-        });
-        if (!findUser) {
-            return new Error(permissionDenied.message)
-        } else {
-            const findBalance = await prisma.accounts.findFirst({
-                where: {
-                    id: {
-                        equals: findUser.accountId
-                    }
-                }
-            });
-            return findBalance;
-        }
+    if (!findUser) {
+      return new Error(permissionDenied.message);
     }
+
+    const findBalance = await prisma.accounts.findFirst({
+      where: {
+        id: findUser.accountId,
+      },
+    });
+
+    return findBalance;
+  }
 }
