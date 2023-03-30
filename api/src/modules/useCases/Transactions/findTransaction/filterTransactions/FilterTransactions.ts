@@ -1,6 +1,9 @@
-import { prisma } from "../../../../../dataBase/prismaClient";
-import { userTokenIsInvalid } from "../../../../../messages/messages";
-
+import { userNotExist } from "../../../../../messages/messages";
+import { findCreditedTransactionsByUserId } from "../../../../resquestAndValidate/transactions/findCreditedTransaction";
+import { findCreditedTransactionsByUserIdAndDate } from "../../../../resquestAndValidate/transactions/findCreditedTransactionsByUserIdAndDate";
+import { findDebitedTransactionsByUserId } from "../../../../resquestAndValidate/transactions/findDebitedTransaction";
+import { findDebitedTransactionsByUserIdAndDate } from "../../../../resquestAndValidate/transactions/findDebitedTransactionsByUserIdAndDate";
+import { findUserById } from "../../../../repositories/usersRepository";
 
 interface IFiltersTransaction {
     userId: string;
@@ -10,98 +13,28 @@ interface IFiltersTransaction {
 
 export class FiltersTransactions {
     async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
+        const user = await findUserById(userId);
 
-        const findUserTransactions = await prisma.users.findUnique({
-            where: {
-                id: userId
-            }
-        });
+        if (!user) {
+            throw new Error(userNotExist.message);
+        }
 
-        if (findUserTransactions) {
-
-            // Somente CashIn 
-            if (cashIn) {
-                const findTransactionCredited = await prisma.transactions.findMany({
-                    where: {
-                        creditedAccountId: {
-                            equals: findUserTransactions.accountId
-                        },
-                    }
-                });
-
-                return findTransactionCredited;
-
-                // somente CashOut
-            }
+        if (cashIn) {
             if (findDate) {
-
-                const dbTransactions = await prisma.transactions.findMany({
-                });
-
-
-                const filteredTransactions = dbTransactions.filter((transaction) => {
-                    const dbDate = new Date(transaction.creatAt);
-                    const normalizedDbDate = dbDate.toISOString().slice(0, 10);
-
-                    const formattedFindDate = new Date(findDate).toISOString().slice(0, 10);
-
-                    return normalizedDbDate === formattedFindDate;
-                });
-
-                return filteredTransactions;
-
-                // Data e CashIn
-            }
-            if (findDate && cashIn) {
-                const findTransactionsCreateAtAndCredited = await prisma.transactions.findMany({
-                    where: {
-                        creditedAccountId: findUserTransactions.accountId
-                    }
-                });
-
-                const filteredTransactionsCreatAtAndCredited = findTransactionsCreateAtAndCredited.filter((transaction) => {
-                    const dbDate = new Date(transaction.creatAt);
-                    const normalizedDbDate = dbDate.toISOString().slice(0, 10);
-
-                    const formattedFindDate = new Date(findDate).toISOString().slice(0, 10);
-
-                    return normalizedDbDate === formattedFindDate;
-                });
-
-                return filteredTransactionsCreatAtAndCredited;
-            }
-            // Data e CashOut
-            if (findDate && !cashIn) {
-                const findTransactionsCreateAtAndDebited = await prisma.transactions.findMany({
-                    where: {
-                        debitedAccountId: findUserTransactions.accountId
-                    }
-                });
-
-                const filteredTransactionsCreatAtAndDebited = findTransactionsCreateAtAndDebited.filter((transaction) => {
-                    const dbDate = new Date(transaction.creatAt);
-                    const normalizedDbDate = dbDate.toISOString().slice(0, 10);
-
-                    const formattedFindDate = new Date(findDate).toISOString().slice(0, 10);
-
-                    return normalizedDbDate === formattedFindDate;
-                });
-
-                return filteredTransactionsCreatAtAndDebited;
-
-            }
-            if (!cashIn) {
-                const findTransactionDebited = await prisma.transactions.findMany({
-                    where: {
-                        debitedAccountId: {
-                            equals: findUserTransactions.accountId
-                        }
-                    }
-                });
-                return findTransactionDebited;
+                const transactions = await findCreditedTransactionsByUserIdAndDate(user.accountId, findDate);
+                return transactions;
+            } else {
+                const transactions = await findCreditedTransactionsByUserId(user.accountId);
+                return transactions;
             }
         } else {
-            return new Error(userTokenIsInvalid.message)
+            if (findDate) {
+                const transactions = await findDebitedTransactionsByUserIdAndDate(user.accountId, findDate);
+                return transactions;
+            } else {
+                const transactions = await findDebitedTransactionsByUserId(user.accountId);
+                return transactions;
+            }
         }
     }
 }
