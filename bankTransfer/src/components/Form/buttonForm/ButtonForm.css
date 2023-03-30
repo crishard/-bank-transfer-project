@@ -4,4 +4,10 @@
     justify-content: center;
     border-radius: 6px;
     border: transparent;
+    padding: 10px 16px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.25rem;
+    font-weight: 500;
+    background-color: rgb(79 70 229);
 }
