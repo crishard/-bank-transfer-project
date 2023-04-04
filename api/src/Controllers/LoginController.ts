@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { LoginUser } from "../modules/login/Login";
 
-
 export class LoginUserController {
   async handle(req: Request, res: Response) {
     const { username, password } = req.body;

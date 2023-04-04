@@ -13,11 +13,7 @@ export class LoginUser {
   async execute({ username, password }: ILoginUser): Promise<string> {
 
 
-    const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-      console.error('A chave secreta JWT não foi definida nas variáveis de ambiente!');
-      process.exit(1);
-    }
+    
     try {
       const user = await prisma.users.findUnique({
         where: { username },
@@ -33,7 +29,7 @@ export class LoginUser {
         throw new Error("Senha inválida");
       }
 
-      const token = sign({ username }, jwtSecret, {
+      const token = sign({ username }, "chavesecreta", {
         subject: user.id.toString(),
         expiresIn: "1d",
       });
