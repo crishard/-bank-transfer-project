@@ -5,10 +5,10 @@ interface IProps{
     text: string | undefined;
 }
 
-export function MessageError(children: IProps){
+export function MessageError(props: IProps){
     return(
-        <div className="message-error">
-            <p>{children.text}</p>
+        <div className="message-error text-sm">
+            <p>{props.text}</p>
         </div>
     )
 }
