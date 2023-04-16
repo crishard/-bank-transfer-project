@@ -22,9 +22,8 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             navigate("/home");
         } else {
             setIsAuthenticated(false);
-            navigate("/login");
         }
-    }, [history]);
+    },);
 
     return <AuthContext.Provider value={{ isAuthenticated }}>{children}</AuthContext.Provider>;
 };
