@@ -28,7 +28,7 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
                 if (decodedToken.exp * 1000 > Date.now()) {
                     setIsAuthenticated(true);
                     navigate("/home");
-                } // Verifica se o token ainda é válido
+                } 
             } else {
                 localStorage.removeItem("token"); // Remove o token expirado do armazenamento local
                 setIsAuthenticated(false);
