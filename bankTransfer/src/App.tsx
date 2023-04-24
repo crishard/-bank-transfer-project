@@ -7,15 +7,15 @@ import "./styles/global.css"
 
 
 export function App() {
-
+  
   return (
     <div className="App">
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<RegisterPage />} />
+            <Route path="home" element={<Home />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="" element={<RegisterPage />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
