@@ -17,7 +17,7 @@ interface IProps {
 export function Table(props: IProps) {
 
     return (
-        <div className="max-h-[80vh] overflow-y-scroll">
+        <div className="max-h-[75vh] overflow-y-scroll">
             <h3 className="tracking-wider text-xl font-bold tracking-tight text-gray-900">{props.title}</h3>
             <table className="transacoes w-full">
                 <tr>

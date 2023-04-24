@@ -25,13 +25,9 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
         if (token) {
             const decodedToken = jwt_decode<ITokenPayload>(token); // Decodifica o token e extrai o payload
             if (token) {
-                if (decodedToken.exp * 1000 > Date.now()) {
-                    setIsAuthenticated(true);
-                    navigate("/home");
-                } 
-            } else {
-                localStorage.removeItem("token"); // Remove o token expirado do armazenamento local
-                setIsAuthenticated(false);
+
+                setIsAuthenticated(true);
+                navigate("/home");
             }
         } else {
             setIsAuthenticated(false);
