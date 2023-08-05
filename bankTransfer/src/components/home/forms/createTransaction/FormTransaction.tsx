@@ -12,7 +12,7 @@ import { LoaderTransaction } from "../../../loader/Loader";
 type FormData = yup.InferType<typeof transactionValidate>;
 export function FormTransaction() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: yupResolver<any>(transactionValidate)
     });
 
@@ -29,21 +29,10 @@ export function FormTransaction() {
             .catch((err) => setError(err.response?.data))
             .then(() => {
                 setMessage("Transferência Realizada!")
-                useEffect(() => {
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 5000);
-                }, []);
-
-            })
+                reset();
+            });
         setIsLoaded(true);
     };
-
-    useEffect(() => {
-        setTimeout(() => {
-            setMessage("");
-        }, 5000);
-    }, []);
 
 
     return (
