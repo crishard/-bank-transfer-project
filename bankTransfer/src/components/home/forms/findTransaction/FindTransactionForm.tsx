@@ -13,6 +13,7 @@ import { MessageError } from "../../../Form/messageError/MessageError";
 import { LoaderTransaction } from "../../../loader/Loader";
 import { TitleTransaction } from "../TitleTransaction";
 import { Table } from "../../tableTransaction/Table";
+import { format } from 'date-fns';
 
 type Repositories = {
     id: string;
@@ -85,7 +86,7 @@ export function FindTransactionForm() {
                 <>
                     {filter && (
                         <div className="mt-8 text-center">
-                            <Table data={filter} title={"Transações Filtradas"}/>
+                            <Table data={filter} title={"Transações Filtradas"} />
                         </div>
                     )}
                     {error && <MessageError text={error} />}

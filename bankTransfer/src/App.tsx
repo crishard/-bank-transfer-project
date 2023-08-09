@@ -13,9 +13,9 @@ export function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="home" element={<Home />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="" element={<RegisterPage />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<RegisterPage />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

@@ -5,7 +5,7 @@ import { transactionValidate } from "../../../../schema/transactionValidate";
 import { MessageError } from "../../../Form/messageError/MessageError";
 import { ButtonForm } from "../../../Form/buttonForm/ButtonForm";
 import { createTransaction } from "../../../../services/createTransactions";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PoPup } from "../../../poPup/PoPup";
 import { LoaderTransaction } from "../../../loader/Loader";
 
@@ -20,6 +20,11 @@ export function FormTransaction() {
     const [message, setMessage] = useState("")
     const [isLoaded, setIsLoaded] = useState(true);
 
+    function reloadPageAfterDelay() {
+        setTimeout(() => {
+            window.location.reload();
+        }, 2500);
+    }
 
 
     async function onSubmit(data: FormData) {
@@ -28,8 +33,9 @@ export function FormTransaction() {
         await createTransaction(data.value, data.userCashIn, data.password)
             .catch((err) => setError(err.response?.data))
             .then(() => {
-                setMessage("Transferência Realizada!")
+                setMessage("Transferência Realizada, aguarde alguns segundos!")
                 reset();
+                reloadPageAfterDelay();
             });
         setIsLoaded(true);
     };
