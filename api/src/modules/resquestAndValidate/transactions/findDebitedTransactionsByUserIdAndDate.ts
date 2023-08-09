@@ -1,6 +1,6 @@
 import { prisma } from "../../../dataBase/prismaClient";
 
-export async function findDebitedTransactionsByUserIdAndDate(userId: string, findDate: string) {
+export async function findDebitedTransactionsByUserIdAndDate(userId: string, findDate: Date) {
     return prisma.transactions.findMany({
         where: {
             AND: [
@@ -12,7 +12,7 @@ export async function findDebitedTransactionsByUserIdAndDate(userId: string, fin
                 },
                 {
                     creatAt: {
-                        equals: new Date(findDate)
+                        equals: findDate
                     }
                 }
             ]

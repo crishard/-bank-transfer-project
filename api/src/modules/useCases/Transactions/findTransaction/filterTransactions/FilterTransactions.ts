@@ -8,7 +8,7 @@ import { findUserById } from "../../../../repositories/usersRepository";
 interface IFiltersTransaction {
     userId: string;
     cashIn: boolean;
-    findDate: string;
+    findDate: Date;
 }
 
 export class FiltersTransactions {
