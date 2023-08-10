@@ -18,19 +18,24 @@ interface IAuthProviderProps {
 
 const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            const decodedToken = jwt_decode<ITokenPayload>(token); // Decodifica o token e extrai o payload
-            if (token) {
-
+            const decodedToken = jwt_decode<ITokenPayload>(token);
+            const currentTimestamp = Math.floor(Date.now() / 1000);
+            if (decodedToken.exp < currentTimestamp) {
+                navigate("/login");
+                localStorage.removeItem("token");
+            } else{
                 setIsAuthenticated(true);
                 navigate("/home");
             }
         } else {
             setIsAuthenticated(false);
+            navigate("/login");
         }
     }, [navigate]);
 

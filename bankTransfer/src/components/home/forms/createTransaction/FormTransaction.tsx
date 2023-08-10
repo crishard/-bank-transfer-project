@@ -29,7 +29,7 @@ export function FormTransaction() {
     function removePoup() {
         setTimeout(() => {
             setMessage("")
-        }, 3500);
+        }, 3000);
     }
 
 
@@ -37,16 +37,17 @@ export function FormTransaction() {
         setIsLoaded(false)
         setMessage("Realizando transferência...");
         await createTransaction(data.value, data.userCashIn, data.password)
-        
-        .then(() => {
-            setMessage("Transferência realizada, atualizando dados...")
-            reset();
-            reloadPageAfterDelay();
-        }) .catch((err) => {setError(err.response?.data)
-            setMessage( err.response?.data);
-            removePoup();
 
-        })
+            .then(() => {
+                setMessage("Transferência realizada, atualizando dados...")
+                reset();
+                reloadPageAfterDelay();
+            }).catch((err) => {
+                setError(err.response?.data)
+                setMessage(err.response?.data);
+                reset();
+                removePoup();
+            })
         setIsLoaded(true);
     };
 
@@ -93,7 +94,7 @@ export function FormTransaction() {
                         </div>
 
                         <div className="mt-2.5 py-4">
-                            {<p className="font-normal text-base text-rose-700">Verifique ás informações</p>}
+                            <p className="font-normal text-base text-rose-700">Verifique ás informações</p>
                             <ButtonForm text="Transferir" />
                         </div>
                     </div>
