@@ -23,20 +23,30 @@ export function FormTransaction() {
     function reloadPageAfterDelay() {
         setTimeout(() => {
             window.location.reload();
-        }, 2500);
+        }, 3500);
+    }
+
+    function removePoup() {
+        setTimeout(() => {
+            setMessage("")
+        }, 3500);
     }
 
 
     async function onSubmit(data: FormData) {
         setIsLoaded(false)
-        setMessage("Realizando transferência");
+        setMessage("Realizando transferência...");
         await createTransaction(data.value, data.userCashIn, data.password)
-            .catch((err) => setError(err.response?.data))
-            .then(() => {
-                setMessage("Transferência Realizada, aguarde alguns segundos!")
-                reset();
-                reloadPageAfterDelay();
-            });
+        
+        .then(() => {
+            setMessage("Transferência realizada, atualizando dados...")
+            reset();
+            reloadPageAfterDelay();
+        }) .catch((err) => {setError(err.response?.data)
+            setMessage( err.response?.data);
+            removePoup();
+
+        })
         setIsLoaded(true);
     };
 
@@ -83,7 +93,7 @@ export function FormTransaction() {
                         </div>
 
                         <div className="mt-2.5 py-4">
-                            {error ? <MessageError text={error} /> : <p className="font-normal text-base text-rose-700">Verifique ás informações</p>}
+                            {<p className="font-normal text-base text-rose-700">Verifique ás informações</p>}
                             <ButtonForm text="Transferir" />
                         </div>
                     </div>

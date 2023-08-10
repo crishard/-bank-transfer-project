@@ -13,6 +13,7 @@ interface IFiltersTransaction {
 
 export class FiltersTransactions {
     async execute({ userId, cashIn, findDate }: IFiltersTransaction) {
+
         const user = await findUserById(userId);
 
         if (!user) {

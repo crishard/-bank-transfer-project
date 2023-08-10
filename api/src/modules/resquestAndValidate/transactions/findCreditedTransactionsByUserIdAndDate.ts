@@ -1,23 +1,22 @@
 import { prisma } from "../../../dataBase/prismaClient";
+import { isSameDay } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 export async function findCreditedTransactionsByUserIdAndDate(userId: string, findDate: Date) {
-    return prisma.transactions.findMany({
-        where: {
-            AND: [
-                {
-                    creditedAccountId: {
-                        equals: userId
-                    },
 
-                },
-                {
-                    creatAt: {
-                        equals: findDate
-                    }
-                }
-            ]
+
+    const transactions = await prisma.transactions.findMany({
+        where: {
+            creditedAccountId: {
+                equals: userId
+            },
         }
     });
 
-    console.log
+    const zonedFindDate = utcToZonedTime(findDate, 'UTC');
+    const filteredTransactions = transactions.filter(transaction =>
+        isSameDay(transaction.creatAt, zonedFindDate)
+    );
+
+    return filteredTransactions;
 }
