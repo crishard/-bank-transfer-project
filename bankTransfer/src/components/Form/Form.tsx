@@ -39,16 +39,21 @@ export function Form(props: IFormProps) {
 
   async function onSubmit(data: FormData) {
     setReqLoaded(true)
+
     try {
       if (props.register) {
-        await userRegister(data.username, data.password);
-        navigate("/login");
+        await userRegister(data.username, data.password).then(() => {
+          navigate("/login");
+        }).catch((error) =>{
+          setError(error.response?.data)
+        })
       } else {
         try {
-          const response = await login(data.username, data.password);
-          if (response.status === 200) {
+          const response = await login(data.username, data.password).then(() => {
             navigate("/home");
-          }
+          }).catch((error) =>{
+            setError(error.response?.data)
+          })
         } catch (error: unknown) {
           const err = error as ErrorResponse;
           if (err.response?.status === 400) {

@@ -35,7 +35,6 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             }
         } else {
             setIsAuthenticated(false);
-            navigate("/login");
         }
     }, [navigate]);
 
