@@ -4,6 +4,7 @@ import { findCreditedTransactionsByUserIdAndDate } from "../../../../resquestAnd
 import { findDebitedTransactionsByUserId } from "../../../../resquestAndValidate/transactions/findDebitedTransaction";
 import { findDebitedTransactionsByUserIdAndDate } from "../../../../resquestAndValidate/transactions/findDebitedTransactionsByUserIdAndDate";
 import { findUserById } from "../../../../repositories/usersRepository";
+import { findTransactionsDate } from "../../../../resquestAndValidate/transactions/findTransactionDate";
 
 interface IFiltersTransaction {
     userId: string;
@@ -28,12 +29,17 @@ export class FiltersTransactions {
                 const transactions = await findCreditedTransactionsByUserId(user.accountId);
                 return transactions;
             }
-        } else {
+        } else if(!cashIn){
             if (findDate) {
                 const transactions = await findDebitedTransactionsByUserIdAndDate(user.accountId, findDate);
                 return transactions;
             } else {
                 const transactions = await findDebitedTransactionsByUserId(user.accountId);
+                return transactions;
+            }
+        } else{
+            if(findDate){
+                const transactions = await findTransactionsDate(findDate);
                 return transactions;
             }
         }
