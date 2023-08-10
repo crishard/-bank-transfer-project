@@ -8,8 +8,8 @@ import { findTransactionsDate } from "../../../../resquestAndValidate/transactio
 
 interface IFiltersTransaction {
     userId: string;
-    cashIn: boolean;
-    findDate: Date;
+    cashIn?: boolean;
+    findDate?: Date;
 }
 
 export class FiltersTransactions {
@@ -21,26 +21,21 @@ export class FiltersTransactions {
             throw new Error(userNotExist.message);
         }
 
-        if (cashIn) {
-            if (findDate) {
-                const transactions = await findCreditedTransactionsByUserIdAndDate(user.accountId, findDate);
-                return transactions;
+        if (cashIn === undefined && findDate) {
+            return await findTransactionsDate(findDate);
+        }
+
+        if (findDate) {
+            if (cashIn) {
+                return await findCreditedTransactionsByUserIdAndDate(user.accountId, findDate);
             } else {
-                const transactions = await findCreditedTransactionsByUserId(user.accountId);
-                return transactions;
+                return await findDebitedTransactionsByUserIdAndDate(user.accountId, findDate);
             }
-        } else if(!cashIn){
-            if (findDate) {
-                const transactions = await findDebitedTransactionsByUserIdAndDate(user.accountId, findDate);
-                return transactions;
+        } else {
+            if (cashIn) {
+                return await findCreditedTransactionsByUserId(user.accountId);
             } else {
-                const transactions = await findDebitedTransactionsByUserId(user.accountId);
-                return transactions;
-            }
-        } else{
-            if(findDate){
-                const transactions = await findTransactionsDate(findDate);
-                return transactions;
+                return await findDebitedTransactionsByUserId(user.accountId);
             }
         }
     }
