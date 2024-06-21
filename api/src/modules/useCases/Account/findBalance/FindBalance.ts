@@ -9,7 +9,7 @@ interface IFindBalance {
 
 export class FindBalance {
   async execute({ userId }: IFindBalance) {
-    console.log(userId)
+
     const findUser = await prisma.users.findUnique({
       where: {
         id: userId,

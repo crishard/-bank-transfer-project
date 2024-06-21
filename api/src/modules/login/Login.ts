@@ -13,7 +13,7 @@ export class LoginUser {
   async execute({ username, password }: ILoginUser): Promise<string> {
 
 
-    
+
     try {
       const user = await prisma.users.findUnique({
         where: { username },
@@ -29,13 +29,15 @@ export class LoginUser {
         throw new Error("Senha inválida");
       }
 
-      const token = sign({ username }, "chavesecreta", {
+      const token = sign({ username }, "DHS63543$$$3####NFEOH", {
         subject: user.id.toString(),
         expiresIn: "1d",
       });
 
       return token;
-    } catch (error) {
+    }
+    
+    catch (error) {
       throw new Error((error as Error).message);
     } finally {
       await prisma.$disconnect();

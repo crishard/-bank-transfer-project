@@ -10,7 +10,7 @@ export const createTransaction = async (value: number, userCashIn: string, passw
     }
 
     const response = await api
-        .post("create_transaction", {
+        .post("create_transaction" , {
             value,
             password,
             userCashIn,

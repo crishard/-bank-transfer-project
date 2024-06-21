@@ -18,8 +18,11 @@ export class AuthMiddleware {
     try {
       const { sub } = verify(token, "chavesecreta") as IPayload;
       req.userId = sub;
+
       return next();
-    } catch (err) {
+
+    } 
+    catch (err) {
       return res.status(401).json({ message: "Token inválido", token });
     }
   }

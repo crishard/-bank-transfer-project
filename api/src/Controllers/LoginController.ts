@@ -6,10 +6,12 @@ export class LoginUserController {
     const { username, password } = req.body;
     const loginUser = new LoginUser();
     let result: string | Error;
+
     try {
       result = await loginUser.execute({ username, password });
       return res.json(result);
-    } catch (error) {
+    }
+    catch (error) {
       result = error as Error;
       return res.status(400).json(result.message);
     }

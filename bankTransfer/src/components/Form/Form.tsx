@@ -44,14 +44,14 @@ export function Form(props: IFormProps) {
       if (props.register) {
         await userRegister(data.username, data.password).then(() => {
           navigate("/login");
-        }).catch((error) =>{
+        }).catch((error) => {
           setError(error.response?.data)
         })
       } else {
         try {
-          const response = await login(data.username, data.password).then(() => {
+          await login(data.username, data.password).then(() => {
             navigate("/home");
-          }).catch((error) =>{
+          }).catch((error) => {
             setError(error.response?.data)
           })
         } catch (error: unknown) {
